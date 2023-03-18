@@ -10,5 +10,6 @@
     <color name="navy_blue">#00579A</color>
     <color name="colorPrimaryLight">#D21BBABA</color>
     <color name="blue">#1231DF</color>
+    <color name="colorAccent">#C875BA</color>
 
 </resources>

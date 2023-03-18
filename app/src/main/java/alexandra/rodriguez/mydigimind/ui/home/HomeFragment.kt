@@ -9,12 +9,17 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import alexandra.rodriguez.mydigimind.databinding.FragmentHomeBinding
-import alexandra.rodriguez.mydigimind.ui.Task
+import alexandra.rodriguez.mydigimind.Task
 import android.content.Context
 import android.widget.BaseAdapter
 import android.widget.GridView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeFragment : Fragment() {
+
+    private lateinit var storage: FirebaseFirestore
+    private lateinit var usuario: FirebaseAuth
 
     private var adaptador: AdapterTasks? = null
     private var _binding: FragmentHomeBinding? = null
