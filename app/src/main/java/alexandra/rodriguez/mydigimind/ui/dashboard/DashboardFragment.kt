@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import alexandra.rodriguez.mydigimind.databinding.FragmentDashboardBinding
-import alexandra.rodriguez.mydigimind.ui.Task
+import alexandra.rodriguez.mydigimind.Task
 import alexandra.rodriguez.mydigimind.ui.home.HomeFragment
 import android.app.TimePickerDialog
 import android.widget.*
