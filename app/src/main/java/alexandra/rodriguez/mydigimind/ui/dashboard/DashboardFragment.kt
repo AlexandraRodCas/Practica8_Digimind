@@ -12,6 +12,8 @@ import alexandra.rodriguez.mydigimind.Task
 import alexandra.rodriguez.mydigimind.ui.home.HomeFragment
 import android.app.TimePickerDialog
 import android.widget.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -19,6 +21,8 @@ import kotlin.collections.ArrayList
 class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
+    private lateinit var storage: FirebaseFirestore
+    private lateinit var usuario: FirebaseAuth
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -35,6 +39,8 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        storage = FirebaseFirestore.getInstance()
+        usuario = FirebaseAuth.getInstance()
         val btn_time: Button = root.findViewById(R.id.btn_time)
 
         btn_time.setOnClickListener{
@@ -81,27 +87,30 @@ class DashboardFragment : Fragment() {
             if(checkSunday.isChecked)
                 days.add("Sunday")
 
-            var task: Task?=null
-            if(titulo.equals("") || days.size<1 || tiempo.equals("")){
-                Toast.makeText(root.context, "don't leave empty spaces", Toast.LENGTH_LONG).show()
-            }else{
-                task = Task(titulo, days, tiempo)
-            }
 
-            if (task != null) {
-                HomeFragment.tasks.add(task)
-                Toast.makeText(root.context, "new task added", Toast.LENGTH_LONG).show()
-                et_titulo.setText("")
-                checkMonday.isChecked = false
-                checkTuesday.isChecked = false
-                checkWednesday.isChecked = false
-                checkThursday.isChecked = false
-                checkFriday.isChecked = false
-                checkSaturday.isChecked = false
-                checkSunday.isChecked = false
-                btn_time.setText("")
-            }
+            val actividad = hashMapOf(
+                "actividad" to et_titulo.text.toString(),
+                "email" to usuario.currentUser?.email.toString(),
+                "lu" to checkMonday.isChecked,
+                "ma" to checkTuesday.isChecked,
+                "mi" to checkWednesday.isChecked,
+                "ju" to checkThursday.isChecked,
+                "vi" to checkFriday.isChecked,
+                "sa" to checkSaturday.isChecked,
+                "do" to checkSunday.isChecked,
+                "tiempo" to btn_time.text.toString()
+            )
 
+            storage.collection("actividades")
+                .add(actividad)
+                .addOnSuccessListener {
+                    Toast.makeText(root.context, "Task agregada", Toast.LENGTH_SHORT).show()
+                    var task = Task(titulo, days, tiempo)
+                    HomeFragment.tasks.add(task)
+                }
+                .addOnFailureListener{
+                    Toast.makeText(root.context, it.toString(), Toast.LENGTH_SHORT).show()
+                }
         }
 
         return root
